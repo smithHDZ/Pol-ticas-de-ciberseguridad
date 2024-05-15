@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POLITICAS DE CIBERSEGURIDAD</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" 
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">    
+    
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            position: relative;
+        }       
+        #titulo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        #botonImagen {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 100px;
+            height: 100px;
+            cursor: pointer;
+            transition: width 0.5s, height 0.5s; /* Transición suave al expandir el botón */
+            z-index: 1; /* Asegura que el botón esté encima del fondo oscuro */
+        }
+        #botonImagen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%; /* Agrega bordes redondeados al botón */
+        }
+
+        #fondoImagen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            opacity: 1;
+            z-index: -1; /* Asegura que el fondo oscuro esté detrás del botón */
+        }
+
+        #imagenFondoExpandida {
+            display: none; /* Oculta la imagen expandida inicialmente */
+            opacity: 0.7; /* Opacidad de la imagen de fondo expandida */
+            z-index: 1; /* Asegura que la imagen de fondo expandida esté encima del resto del contenido */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #textoMaquina {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 90px; /* Tamaño de letra aumentado */
+            text-align: center;
+            font-family: "Times New Roman", sans-serif; /* Cambia el tipo de letra */
+            z-index: 1; /* Asegura que el texto esté encima del fondo oscuro */
+        }
+
+        #mapaMental {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Estilos para el texto del mapa mental */
+        #mapaMental area {
+            position: absolute;
+            color: white; /* Color del texto */
+            font-size: 16px; /* Tamaño del texto */
+            text-align: center; /* Alineación del texto */
+        }
+
+        /* Estilos para los botones */
+        .botonDiferente {
+        /* Estilo diferente para el botón "POLÍTICAS DE CIBERSEGURIDAD" */
+        background-color: #ff0000; /* Color de fondo diferente */
+        font-size: 20px; /* Tamaño de letra diferente */
+        font-weight: bold; /* Texto en negrita */
+        padding: 20px 60px;
+        z-index: 1;
+        }
+
+        /* Estilos generales para los botones */
+        .botonSubtema {
+        position: absolute;
+        background-color: #007bff;
+        color: rgb(0, 0, 0);
+        border: none;
+        padding: 20px 50px;
+        cursor: pointer;
+        border-radius: 50px;
+        font-size: 20px; /* Tamaño del texto */
+        z-index: 1; /* Asegura que estén encima de la imagen */
+        }
+
+        /* Estilos para el texto en los botones */
+        .botonTexto {
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 14px;
+        }
+        
+    </style>
+</head>
+<body>
+    <div id="titulo"></div>
+
+
+    <div id="botonImagen" onclick="expandirImagen()">
+        <img src="imagen/boton.jpeg" alt="Imagen pequeña">
+    </div>
+
+    <div id="fondoImagen" class="position-fixed top-0 start-0 w-100 h-100 bg-image" style="background-image: url('imagen/fon.jpeg');"></div>
+
+    <img id="imagenFondoExpandida" src="imagen/map.jpeg" alt="Workplace" usemap="#workmap">
+
+
+    <div id="textoMaquina"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+<script>
+$(function(){
+    var textos = ["POLITICAS DE CIBERSEGURIDAD"];
+    var index = 0;
+    var intervalo = 100;
+    var espera = 2000; // 2 segundos de espera antes de borrar
+
+    mostrarTexto(textos[index]);
+
+    function mostrarTexto(texto) {
+        maquina("textoMaquina", texto, intervalo, function() {
+            // Una vez que se ha mostrado todo el texto, llamamos al callback
+            setTimeout(function() {
+                // Comienza el borrado gradual
+                var i = texto.length;
+                var borradoTimer = setInterval(function() {
+                    if (i >= 0) {
+                        $("#" + "textoMaquina").html(texto.substr(0, i--) + "_");
+                    } else {
+                        clearInterval(borradoTimer);
+                        // Pasamos al siguiente texto
+                        index = (index + 1) % textos.length; // Esto garantiza que index esté entre 0 y textos.length - 1
+                        setTimeout(function() {
+                            mostrarTexto(textos[index]);
+                        }, 1000); // Espera 1 segundo antes de mostrar el próximo texto
+                    }
+                }, intervalo);
+            }, espera);
+        });
+    }
+
+    function maquina(contenedor, texto, intervalo, callback) {
+        var i = 0;
+        var timer = setInterval(function() {
+            if (i < texto.length) {
+                $("#" + contenedor).html(texto.substr(0, i++) + "_");
+            } else {
+                clearInterval(timer);
+                // Una vez que se ha mostrado todo el texto, llamamos al callback
+                if (callback) {
+                    callback();
+                }
+            }
+        }, intervalo);
+    };
+});
+
+function expandirImagen() {
+    $('#fondoImagen').hide();
+    $('#imagenFondoExpandida').show();
+    $('#textoMaquina').hide();
+
+    // Genera los botones de los subtemas
+    generarBotones();
+}
+
+function generarBotones() {
+    // Lista de subtemas y sus posiciones
+    var subtemas = [
+        //FILA 1
+        { nombre: "Política de Clasificación de la información", x: 50, y: 50, pagina: "paginas/pag1.html"},
+        { nombre: "Política de Uso aceptable de los activos", x: 50, y: 220, pagina: "paginas/pag2.html" },
+        { nombre: "Política de Gestión de riesgos de seguridad de la información", x: 50, y: 425, pagina: "paginas/pag3.html" },
+        { nombre: "Política de Control de acceso lógico", x: 50, y: 655,  pagina: "paginas/pag4.html" },
+        { nombre: "Política de Gestión de usuarios y contraseñas", x: 50, y: 905, pagina: "paginas/pag5.html" },
+        //FILA 2
+        { nombre: "Política de Gestión de usuarios de acceso privilegiado", x: 240, y: 50, pagina: "paginas/pag6.html" },
+        { nombre: "Política de Uso de controles criptográficos", x: 240, y: 270, pagina: "paginas/pag7.html" },
+        { nombre: "Política de Intercambio de información", x: 240, y: 440, pagina: "paginas/pag8.html" },
+        { nombre: "Política de Traslado físico de la información", x: 240, y: 610, pagina: "paginas/pag9.html" },
+        { nombre: "Política de Control de acceso físico a áreas seguras", x: 240, y: 780, pagina: "paginas/pag10.html" },
+        // FILA 3
+        { nombre: "Política de Seguridad del equipamiento", x: 430, y: 50, pagina: "paginas/pag11.html" },
+        { nombre: "Política de Respaldo de información", x: 430, y: 200, pagina: "paginas/pag12.html" },
+
+        //BOTON DIFERENTE
+        { class: "botonDiferente", nombre: "POLITICA DE CIBERSEGURIDAD", x: 500, y: 380},  
+
+        //FILA 4
+        { nombre: "Política de Protección contra software malicioso", x: 430, y: 500, pagina: "paginas/pag13.html" },
+        { nombre: "Política de Gestión de cambios", x: 430, y: 700, pagina: "paginas/pag14.html" },
+        { nombre: "Política de Separación de entornos", x: 430, y: 900, pagina: "paginas/pag15.html" },
+
+        //FILA 5
+        { nombre: "Política de Destrucción de la informacion", x: 640, y: 50, pagina: "paginas/pag16.html" },
+        { nombre: "Política de Dispositivos móviles", x: 640, y: 220, pagina: "paginas/pag17.html" },
+        { nombre: "Política de Escritorio y pantalla limpios", x: 640, y: 500, pagina: "paginas/pag18.html" },
+        { nombre: "Política de Acceso remoto", x: 640, y: 725, pagina: "paginas/pag19.html" },
+        { nombre: "Política de Uso de Internet", x: 640, y: 900, pagina: "paginas/pag20.html" },
+
+        //FILA 6
+        { nombre: "Política de Continuidad de las operaciones y recuperación ante desastres", x: 830, y: 50, pagina: "paginas/pag21.html" },
+        { nombre: "Política de Procesamiento Externo", x: 830, y: 350, pagina: "paginas/pag22.html" },
+        { nombre: "Política de Relacionamiento con proveedores", x: 830, y: 500, pagina: "paginas/pag23.html" },
+        { nombre: "Política de Cumplimiento normativo", x: 830, y: 690, pagina: "paginas/pag24.html" },
+        { nombre: "Política de Uso institucional de redes sociales", x: 830, y: 870, pagina: "paginas/pag25.html" },
+
+        // FILA 7
+        { nombre: "Política de seguridad en la adquisición de tecnologías", x: 1030, y: 50, pagina: "paginas/pag26.html" },
+        { nombre: "Política de Finalización o cambio en la relación laboral", x: 1030, y: 300, pagina: "paginas/pag27.html" },
+        { nombre: "Política de Registro y auditoria de eventos", x: 1040, y: 550, pagina: "paginas/pag28.html" },
+        { nombre: "Política de Gestión de incidentes de seguridad de la información", x: 1030, y: 820, pagina: "paginas/pag29.html" },
+    ];
+
+      // Contenedor de los botones
+      var contenedor = document.createElement('div');
+        contenedor.id = 'botonesSubtemas';
+        contenedor.style.position = 'absolute';
+        contenedor.style.top = '0';
+        contenedor.style.left = '0';
+        document.body.appendChild(contenedor);
+
+    // Genera un botón para cada subtema
+    subtemas.forEach(function(subtema) {
+        var boton = document.createElement('button');
+        boton.style.position = 'absolute';
+        boton.style.left = subtema.x + 'px';
+        boton.style.top = subtema.y + 'px';
+        boton.innerHTML = '<span class="botonTexto">' + subtema.nombre + '</span>';
+        boton.onclick = function() {
+            // Redirecciona a la página correspondiente al hacer clic en el botón
+            window.location.href = subtema.pagina;
+        };
+
+        // Verifica si el nombre del subtema es "POLITICA DE CIBERSEGURIDAD" y asigna la clase "botonDiferente"
+        if (subtema.nombre === "POLITICA DE CIBERSEGURIDAD") {
+            boton.classList.add("botonDiferente");
+        } else {
+            boton.classList.add("botonSubtema");
+        }
+
+        contenedor.appendChild(boton);
+    });
+}
+
+
+</script>
+
+</body>
+</html>

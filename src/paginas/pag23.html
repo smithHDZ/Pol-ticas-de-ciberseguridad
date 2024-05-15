@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Mental - Política de Uso Aceptable de los Activos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow-x: hidden; /* Evita el desplazamiento horizontal */
+            overflow-y: auto; /* Permite el desplazamiento vertical */
+        }
+        #imagenFondo {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Mover la imagen de fondo detrás de todo */
+        }
+        #mapa {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            z-index: 1; /* Asegura que el mapa mental esté encima de la imagen de fondo */
+        }
+        .boton-principal {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 2; /* Asegura que esté encima del mapa mental */
+            font-size: 30px; 
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid p-0">
+    <img id="imagenFondo" src="img/aum.jpeg" class="img-fluid" alt="Imagen de fondo">
+</div>
+
+<div id="mapa"></div>
+
+<button id="botonPrincipal" class="btn btn-primary boton-principal">POLITICAS DE CIBERSEGURIDAD</button>
+
+<script src="https://unpkg.com/gojs/release/go.js"></script>
+<script>
+    var $ = go.GraphObject.make;
+
+    var myDiagram =
+        $(go.Diagram, "mapa",
+        {
+                "undoManager.isEnabled": true,
+                layout: $(go.ForceDirectedLayout, { defaultSpringLength: 20, defaultElectricalCharge: 200 })
+            });
+
+    myDiagram.nodeTemplate =
+    $(go.Node, "Auto",
+            $(go.Shape, "RoundedRectangle",
+                { fill: "lightblue", stroke: "#333", strokeWidth: 1.5 },
+                new go.Binding("fill", "key", function(key) { return key === "1" ? "lightgreen" : "lightblue"; })
+            ),
+            $(go.TextBlock,
+                { margin: 8, font: "bold 14px Arial", stroke: "#333" },
+                new go.Binding("text", "text"),
+                new go.Binding("font", "key", function(key) { return key === "1" ? "bold 16px Arial" : "bold 14px Arial"; })
+            )
+        );
+
+        myDiagram.model = new go.GraphLinksModel(
+            [
+        { key: "1", text: "Política de Relacionamiento con Proveedores" },
+        { key: "2", text: "Objetivo", parent: "1" },
+        { key: "3", text: "Establecer los lineamientos para gestionar la relación con proveedores que brindan servicios o productos a 'La Organización', asegurando la continuidad del negocio y la seguridad de la información.", parent: "2" },
+        { key: "4", text: "Alcance", parent: "1" },
+        { key: "5", text: "Aplica a todos los proveedores que tengan acceso a información, sistemas o instalaciones de 'La Organización'.", parent: "4" },
+        { key: "6", text: "Responsabilidades", parent: "1" },
+        { key: "7", text: "Responsable de Seguridad de la Información: Velar por el cumplimiento de la política.", parent: "6" },
+        { key: "8", text: "Gerencias: Aprobar y supervisar los acuerdos con proveedores.", parent: "6" },
+        { key: "9", text: "Responsable de Tecnología de la Información: Implementar los controles técnicos necesarios.", parent: "6" },
+        { key: "10", text: "Requisitos Clave", parent: "1" },
+        { key: "11", text: "Clasificar a los proveedores según el nivel de criticidad y riesgo.", parent: "10" },
+        { key: "12", text: "Establecer acuerdos de confidencialidad y de nivel de servicio con los proveedores.", parent: "10" },
+        { key: "13", text: "Implementar controles de seguridad física, lógica y de personal en las instalaciones del proveedor.", parent: "10" },
+        { key: "14", text: "Definir un plan de continuidad operativa y recuperación ante desastres.", parent: "10" },
+        { key: "15", text: "Realizar auditorías periódicas al proveedor para verificar el cumplimiento.", parent: "10" },
+        { key: "16", text: "Mantener un registro de los acuerdos y servicios provistos por los proveedores.", parent: "10" },
+        { key: "17", text: "Monitoreo y Revisión", parent: "1" },
+        { key: "18", text: "Revisión anual de la política y los acuerdos con proveedores.", parent: "17" },
+        { key: "19", text: "Informes periódicos al comité de seguridad sobre el cumplimiento.", parent: "17" }
+    ],
+    [
+        { from: "1", to: "2" },
+        { from: "2", to: "3" },
+        { from: "1", to: "4" },
+        { from: "4", to: "5" },
+        { from: "1", to: "6" },
+        { from: "6", to: "7" },
+        { from: "6", to: "8" },
+        { from: "6", to: "9" },
+        { from: "1", to: "10" },
+        { from: "10", to: "11" },
+        { from: "10", to: "12" },
+        { from: "10", to: "13" },
+        { from: "10", to: "14" },
+        { from: "10", to: "15" },
+        { from: "10", to: "16" },
+        { from: "1", to: "17" },
+        { from: "17", to: "18" },
+        { from: "17", to: "19" }
+    ]);
+
+    // Agregar evento clic al botón principal para centrar el diagrama en el nodo principal
+    document.getElementById("botonPrincipal").addEventListener("click", function() {
+        myDiagram.commandHandler.scrollToPart(myDiagram.findNodeForKey("1"));
+    });
+
+    // Agregar evento clic al botón principal para redirigir a la página principal
+    var botonPrincipal = document.getElementById("botonPrincipal");
+    botonPrincipal.addEventListener("click", function() {
+        window.location.href = "../Principal.html"; // Asegúrate de que esta ruta sea correcta
+    });
+</script>
+
+</body>
+</html>

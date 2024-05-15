@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Mental - Política de Uso Aceptable de los Activos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow-x: hidden; /* Evita el desplazamiento horizontal */
+            overflow-y: auto; /* Permite el desplazamiento vertical */
+        }
+        #imagenFondo {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Mover la imagen de fondo detrás de todo */
+        }
+        #mapa {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            z-index: 1; /* Asegura que el mapa mental esté encima de la imagen de fondo */
+        }
+        .boton-principal {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 2; /* Asegura que esté encima del mapa mental */
+            font-size: 30px; 
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid p-0">
+    <img id="imagenFondo" src="img/cib.jpeg" class="img-fluid" alt="Imagen de fondo">
+</div>
+
+<div id="mapa"></div>
+
+<button id="botonPrincipal" class="btn btn-primary boton-principal">POLITICAS DE CIBERSEGURIDAD</button>
+
+<script src="https://unpkg.com/gojs/release/go.js"></script>
+<script>
+    var $ = go.GraphObject.make;
+
+    var myDiagram =
+        $(go.Diagram, "mapa",
+        {
+                "undoManager.isEnabled": true,
+                layout: $(go.ForceDirectedLayout, { defaultSpringLength: 20, defaultElectricalCharge: 200 })
+            });
+
+    myDiagram.nodeTemplate =
+    $(go.Node, "Auto",
+            $(go.Shape, "RoundedRectangle",
+                { fill: "lightblue", stroke: "#333", strokeWidth: 1.5 },
+                new go.Binding("fill", "key", function(key) { return key === "1" ? "lightgreen" : "lightblue"; })
+            ),
+            $(go.TextBlock,
+                { margin: 8, font: "bold 14px Arial", stroke: "#333" },
+                new go.Binding("text", "text"),
+                new go.Binding("font", "key", function(key) { return key === "1" ? "bold 16px Arial" : "bold 14px Arial"; })
+            )
+        );
+
+    myDiagram.model = new go.GraphLinksModel(
+        [
+            { key: "1", text: "Política de Uso Aceptable de los Activos" },
+            { key: "2", text: "Objetivo", parent: "1" },
+            { key: "3", text: "Asegurar que el personal y proveedores comprendan que los activos de información son exclusivamente para fines laborales", parent: "2" },
+            { key: "4", text: "Que el personal y proveedores conozcan las pautas y tomen recaudos para proteger los activos de información", parent: "2" },
+            { key: "5", text: "Alcance", parent: "1" },
+            { key: "6", text: "Todo el personal y proveedores que hacen uso de activos de información para desempeñar sus responsabilidades laborales", parent: "5" },
+            { key: "7", text: "Responsabilidades", parent: "1" },
+            { key: "8", text: "El responsable de seguridad de la información debe velar por el cumplimiento de la política", parent: "7" },
+            { key: "9", text: "Todo el personal es responsable por cumplir con lo establecido en la política", parent: "7" },
+            { key: "10", text: "Proveedores con acceso a activos de información son responsables por cumplir con la política", parent: "7" },
+            { key: "11", text: "Lineamientos de Uso", parent: "1" },
+            { key: "12", text: "Usar equipos y recursos de comunicación para fines exclusivos de la organización y dentro de los lineamientos de seguridad", parent: "11" },
+            { key: "13", text: "Respetar la normativa vigente", parent: "11" },
+            { key: "14", text: "Las conexiones podrán ser controladas y monitoreadas", parent: "11" },
+            { key: "15", text: "Uso Prohibido", parent: "1" },
+            { key: "16", text: "Usar cualquier equipo, medio de almacenamiento, etc. de uso personal dentro de las instalaciones sin autorización", parent: "15" },
+            { key: "17", text: "Realizar actividades que puedan comprometer la seguridad de los activos", parent: "15" }
+        ],
+        [
+            { from: "1", to: "2" },
+            { from: "2", to: "3" },
+            { from: "2", to: "4" },
+            { from: "1", to: "5" },
+            { from: "5", to: "6" },
+            { from: "1", to: "7" },
+            { from: "7", to: "8" },
+            { from: "7", to: "9" },
+            { from: "7", to: "10" },
+            { from: "1", to: "11" },
+            { from: "11", to: "12" },
+            { from: "11", to: "13" },
+            { from: "11", to: "14" },
+            { from: "1", to: "15" },
+            { from: "15", to: "16" },
+            { from: "15", to: "17" }
+        ]
+    );
+
+    // Agregar evento clic al botón principal para centrar el diagrama en el nodo principal
+    document.getElementById("botonPrincipal").addEventListener("click", function() {
+        myDiagram.commandHandler.scrollToPart(myDiagram.findNodeForKey("1"));
+    });
+
+    // Agregar evento clic al botón principal para redirigir a la página principal
+    var botonPrincipal = document.getElementById("botonPrincipal");
+    botonPrincipal.addEventListener("click", function() {
+        window.location.href = "../Principal.html"; // Asegúrate de que esta ruta sea correcta
+    });
+</script>
+
+</body>
+</html>

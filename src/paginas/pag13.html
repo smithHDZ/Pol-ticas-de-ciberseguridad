@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Mental - Política de Uso Aceptable de los Activos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow-x: hidden; /* Evita el desplazamiento horizontal */
+            overflow-y: auto; /* Permite el desplazamiento vertical */
+        }
+        #imagenFondo {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Mover la imagen de fondo detrás de todo */
+        }
+        #mapa {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            z-index: 1; /* Asegura que el mapa mental esté encima de la imagen de fondo */
+        }
+        .boton-principal {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 2; /* Asegura que esté encima del mapa mental */
+            font-size: 30px; 
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid p-0">
+    <img id="imagenFondo" src="img/sim.jpeg" class="img-fluid" alt="Imagen de fondo">
+</div>
+
+<div id="mapa"></div>
+
+<button id="botonPrincipal" class="btn btn-primary boton-principal">POLITICAS DE CIBERSEGURIDAD</button>
+
+<script src="https://unpkg.com/gojs/release/go.js"></script>
+<script>
+    var $ = go.GraphObject.make;
+
+    var myDiagram =
+        $(go.Diagram, "mapa",
+        {
+                "undoManager.isEnabled": true,
+                layout: $(go.ForceDirectedLayout, { defaultSpringLength: 20, defaultElectricalCharge: 200 })
+            });
+
+    myDiagram.nodeTemplate =
+    $(go.Node, "Auto",
+            $(go.Shape, "RoundedRectangle",
+                { fill: "lightblue", stroke: "#333", strokeWidth: 1.5 },
+                new go.Binding("fill", "key", function(key) { return key === "1" ? "lightgreen" : "lightblue"; })
+            ),
+            $(go.TextBlock,
+                { margin: 8, font: "bold 14px Arial", stroke: "#333" },
+                new go.Binding("text", "text"),
+                new go.Binding("font", "key", function(key) { return key === "1" ? "bold 16px Arial" : "bold 14px Arial"; })
+            )
+        );
+
+        myDiagram.model = new go.GraphLinksModel(
+            [
+        { key: "1", text: "Política de Protección contra Software Malicioso" },
+        { key: "2", text: "Objetivo", parent: "1" },
+        { key: "3", text: "Asegurar la protección de la información y los sistemas informáticos contra software malicioso como virus, gusanos, troyanos, spyware, adware intrusivo, ransomware, entre otros", parent: "2" },
+        { key: "4", text: "Alcance", parent: "1" },
+        { key: "5", text: "Todos los sistemas informáticos que respaldan los procesos de negocio de la organización", parent: "4" },
+        { key: "6", text: "Responsabilidades", parent: "1" },
+        { key: "7", text: "Responsable de Seguridad de la Información", parent: "6" },
+        { key: "8", text: "Velar por el cumplimiento de la política", parent: "7" },
+        { key: "9", text: "Responsable de Tecnología de la Información", parent: "6" },
+        { key: "10", text: "Encargado de la gestión técnica relacionada con la política", parent: "9" },
+        { key: "11", text: "Personal o proveedores de la organización", parent: "6" },
+        { key: "12", text: "Deben cumplir con lo establecido en la política", parent: "11" },
+        { key: "13", text: "Políticas Relacionadas", parent: "1" },
+        { key: "14", text: "Política de Uso Aceptable de los Activos", parent: "13" },
+        { key: "15", text: "Descripción", parent: "1" },
+        { key: "16", text: "Definir procedimientos y responsabilidades para proteger los sistemas contra software malicioso", parent: "15" },
+        { key: "17", text: "Brindar capacitación al personal en el uso de soluciones antivirus y mecanismos de detección de software malicioso", parent: "15" },
+        { key: "18", text: "Concientizar a los usuarios sobre los riesgos del software malicioso y los procedimientos en caso de detección", parent: "15" },
+        { key: "19", text: "Garantizar que todos los equipos informáticos estén protegidos por soluciones técnicas contra software malicioso", parent: "15" }
+    ],
+    [
+        { from: "1", to: "2" },
+        { from: "2", to: "3" },
+        { from: "1", to: "4" },
+        { from: "4", to: "5" },
+        { from: "1", to: "6" },
+        { from: "6", to: "7" },
+        { from: "7", to: "8" },
+        { from: "6", to: "9" },
+        { from: "9", to: "10" },
+        { from: "6", to: "11" },
+        { from: "11", to: "12" },
+        { from: "1", to: "13" },
+        { from: "13", to: "14" },
+        { from: "1", to: "15" },
+        { from: "15", to: "16" },
+        { from: "15", to: "17" },
+        { from: "15", to: "18" },
+        { from: "15", to: "19" }
+    ]);
+
+    // Agregar evento clic al botón principal para centrar el diagrama en el nodo principal
+    document.getElementById("botonPrincipal").addEventListener("click", function() {
+        myDiagram.commandHandler.scrollToPart(myDiagram.findNodeForKey("1"));
+    });
+
+    // Agregar evento clic al botón principal para redirigir a la página principal
+    var botonPrincipal = document.getElementById("botonPrincipal");
+    botonPrincipal.addEventListener("click", function() {
+        window.location.href = "../Principal.html"; // Asegúrate de que esta ruta sea correcta
+    });
+</script>
+
+</body>
+</html>
